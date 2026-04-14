@@ -33,6 +33,7 @@ LOGDIR=${ROOTDIR}/testlogs
 LOGFILE=${LOGDIR}/`date +'%y-%m-%d_%H-%M-%S'`.log
 
 TOX_CORES=auto
+BACKEND = current_tf_cuda
 
 ifeq ($(OS),Windows_NT)
 	ACTIVATE:=. ${VENV_SUBDIR}/Scripts/activate
@@ -59,7 +60,7 @@ venv:
 	
 
 pypackages: venv
-	${ACTIVATE}; ${PYTHON} -m ${PIP} install -e ${ROOTDIR}[dev] --prefer-binary --log ${INSTALL_LOG_FILE}
+	${ACTIVATE}; ${PYTHON} -m ${PIP} install -e ${ROOTDIR}[dev,${BACKEND}] --prefer-binary --log ${INSTALL_LOG_FILE}
 	touch $@
 
 test: pypackages

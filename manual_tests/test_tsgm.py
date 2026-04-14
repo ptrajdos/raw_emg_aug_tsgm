@@ -2,7 +2,8 @@ import os
 import numpy as np
 
 # 1. Backend Configuration
-os.environ["KERAS_BACKEND"] = "tensorflow"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "-1" #disable cuda. 
+os.environ["KERAS_BACKEND"] = "tensorflow" #"torch" # "tensorflow" "jax"
 import keras
 import tsgm
 

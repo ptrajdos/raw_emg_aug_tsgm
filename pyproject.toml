@@ -7,7 +7,7 @@ name = "raw_emg_aug_tsgm"
 dynamic = ["version", "readme"]
 dependencies = [
     'dexterous_bioprosthesis_2021_raw_datasets @ git+https://github.com/ptrajdos/dexterous-bioprosthesis-2021-raw-dataset.git',
-    'tsgm[all]',
+    'tsgm',
 ]
 requires-python = ">=3.9"
 authors = [
@@ -43,6 +43,25 @@ dev = [
     'mypy>=1.19.1, <2.0.0',
     'tox>=4.0.0, <5.0.0',
 ]
+
+old_tf_cuda = [
+    'tensorflow-probability',
+    'tf_keras<2.16.0',
+    'tensorflow[and-cuda]<2.16.0',
+]
+current_tf_cuda = [
+    'tensorflow-probability',
+    'tensorflow',
+]
+torch_current = [
+    'torch',
+    'torchvision',
+]
+jax_current = [
+    'jax',
+    'jaxlib',
+]
+
 
 [tool.setuptools.dynamic]
 version = {attr = "raw_emg_aug_tsgm.__version__"}  # any module attribute compatible with ast.literal_eval
