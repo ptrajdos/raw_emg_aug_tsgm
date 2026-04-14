@@ -66,7 +66,7 @@ pypackages: venv
 test: pypackages
 	mkdir -p ${LOGDIR}  
 	${ACTIVATE}; ${COVERAGE} run --branch  --source=${SRCDIR} -m unittest discover -p '*_test.py' -v -s ${TESTDIR} 2>&1 |tee -a ${LOGFILE}
-	${ACTIVATE}; ${COVERAGE} html --show-contexts
+	#${ACTIVATE}; ${COVERAGE} html --show-contexts
 
 
 test_parallel: pypackages
