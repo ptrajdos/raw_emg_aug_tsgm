@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "raw_emg_aug_tsgm"
+dynamic = ["version", "readme"]
+dependencies = [
+    'dexterous_bioprosthesis_2021_raw_datasets @ git+https://github.com/ptrajdos/dexterous-bioprosthesis-2021-raw-dataset.git',
+    'tsgm[all]',
+]
+requires-python = ">=3.9"
+authors = [
+  {name = "Pawel Trajdos", email = "pawel.trajdos@pwr.edu.pl"},
+]
+maintainers = [
+  {name = "Pawel Trajdos", email = "pawel.trajdos@pwr.edu.pl"}
+]
+description = "Augmentation based on tsgm"
+
+license = "BSD-3-Clause"
+license-files = ["LICEN[CS]E.*"]
+keywords = ["scikit-learn", "augmentation"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python"
+]
+
+[project.optional-dependencies]
+
+dev = [
+    'coverage>=7.10.7, <8.0.0',
+    'unittest-parallel>=1.7.0, <2.0.0',
+    'pandas>=2.0.0, <3.0.0',
+    'pdoc3>=0.11.1, <0.12',
+    'pytest>=8.4.2, <9.0.0',
+    'pytest-cov>=6.3.0, <7.0.0',
+    'pytest-profiling>=1.8.1, <2.0.0',
+    'pytest-xdist>=3.6.1, < 4.0.0',
+    'snakeviz>=2.2.2, <3.0.0',
+    'pylint>=3.3.9, <4.0.0',
+    'flake8>=7.3.0, <8.0.0',
+    'mypy>=1.19.1, <2.0.0',
+    'tox>=4.0.0, <5.0.0',
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "raw_emg_aug_tsgm.__version__"}  # any module attribute compatible with ast.literal_eval
+readme = {file = ["README.md"]}
+
+[project.urls]
+Repository = "https://github.com/ptrajdos/raw_emg_aug_tsgm.git"
+
+[tool.setuptools]
+packages = { find = { include = ["raw_emg_aug_tsgm", "raw_emg_aug_tsgm.*"] } }
