@@ -33,7 +33,7 @@ LOGDIR=${ROOTDIR}/testlogs
 LOGFILE=${LOGDIR}/`date +'%y-%m-%d_%H-%M-%S'`.log
 
 TOX_CORES=auto
-BACKEND = current_tf_cuda
+BACKEND = current_tf
 
 ifeq ($(OS),Windows_NT)
 	ACTIVATE:=. ${VENV_SUBDIR}/Scripts/activate
