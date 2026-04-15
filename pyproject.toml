@@ -69,6 +69,10 @@ jax_current = [
     'jax',
     'jaxlib',
 ]
+jax_macos = [
+  'jax[metal]',
+  'jaxlib'
+]
 
 
 [tool.setuptools.dynamic]

@@ -27,6 +27,7 @@ PYTEST=pytest
 PYLINT= pylint
 FLAKE8= flake8
 MYPY= mypy
+# --system-site-packages for using system installed packages ex. from FreeBSD. 
 VENV_OPTIONS=
 
 LOGDIR=${ROOTDIR}/testlogs
