@@ -1,7 +1,7 @@
 ROOTDIR=$(realpath $(dir $(firstword $(MAKEFILE_LIST))))
 
 
-SRCDIR=${ROOTDIR}/raw_emg_aug_rats
+SRCDIR=${ROOTDIR}/raw_emg_aug_tsgm
 TESTDIR=${ROOTDIR}/tests
 COVDIR=${ROOTDIR}/htmlcov_p
 COVERAGERC=${ROOTDIR}/.coveragerc
@@ -34,7 +34,7 @@ LOGDIR=${ROOTDIR}/testlogs
 LOGFILE=${LOGDIR}/`date +'%y-%m-%d_%H-%M-%S'`.log
 
 TOX_CORES=auto
-BACKEND = current_tf
+BACKEND=current_tf
 
 ifeq ($(OS),Windows_NT)
 	ACTIVATE:=. ${VENV_SUBDIR}/Scripts/activate
