@@ -25,12 +25,15 @@ class CGANFactory(ModelFactory):
         self.model_compile_options = model_compile_options
         self.latent_dim = latent_dim
 
+    def _get_default_architecture_cls(self) -> Architecture:
+        return cGAN_Conv4Architecture
+
     def _get_efective_architecture_cls(self) -> Architecture:
         return (
-            cGAN_Conv4Architecture
+            self._get_default_architecture_cls()
             if self.cgan_architecture_cls is None
             else self.cgan_architecture_cls
-        )
+        )  # type: ignore
 
     def _get_effective_architecture_options(self):
         return (
@@ -46,33 +49,53 @@ class CGANFactory(ModelFactory):
             else self.model_construction_params
         )
 
+    def _get_default_model_compile_options(self) -> dict:
+        return {
+            "d_optimizer": keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
+            "g_optimizer": keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
+            "loss_fn": keras.losses.BinaryCrossentropy(from_logits=True),
+        }
+
     def _get_effective_model_compile_options(self):
         return (
             self.model_compile_options
             if self.model_compile_options is not None
-            else {
-                "d_optimizer": keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
-                "g_optimizer": keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
-                "loss_fn": keras.losses.BinaryCrossentropy(from_logits=True),
-            }
+            else self._get_default_model_compile_options()
         )
 
     def get_latent_dim(self) -> int:
         return self.latent_dim
 
-    def get_compiled_model(self, raw_signals: RawSignals):
+    def _get_architecture_obj(self, raw_signals: RawSignals) -> Architecture:
         dim_params = self._get_dims(raw_signals)
         architecture_construction_params = self._get_effective_architecture_options()
         architecture_construction_params.update(dim_params)
 
         architecture_obj = self._get_efective_architecture_cls()(
             **architecture_construction_params
-        )
+        )  # type: ignore
+        return architecture_obj
+    
+    def _get_model_creation_cls(self):
+        return tsgm.models.cgan.ConditionalGAN
+
+    
+    def _get_model(self, architecture_obj):
         eff_model_constr_options = self._get_effective_model_construction_options()
         eff_model_constr_options.update(architecture_obj.get())
         eff_model_constr_options.update({"latent_dim": self.get_latent_dim()})
 
-        cgan_model: keras.Model = tsgm.models.cgan.ConditionalGAN(**eff_model_constr_options)
+        cgan_model: keras.Model = self._get_model_creation_cls()(
+            **eff_model_constr_options
+        )
+        return cgan_model
+
+    def get_compiled_model(self, raw_signals: RawSignals) -> keras.Model:
+
+        architecture_obj = self._get_architecture_obj(raw_signals=raw_signals)
+
+        cgan_model = self._get_model(architecture_obj)
+
         eff_model_compile_options = self._get_effective_model_compile_options()
         cgan_model.compile(**eff_model_compile_options)
 
