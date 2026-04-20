@@ -7,7 +7,7 @@ class TSGMAugmenterWrapperTest(RawSignalsAugumenterTest):
 
     __test__ = True
 
-    def get_augumenter(self):
+    def get_augumenters(self):
         return {
             "Base":TSGMAugmenterWrapper(),
             "Window-args":TSGMAugmenterWrapper(augmenter_cls=WindowWarping, augmenter_gen_params={ 'window_ratio':0.2}),

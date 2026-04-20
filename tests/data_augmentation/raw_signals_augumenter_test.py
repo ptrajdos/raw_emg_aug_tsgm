@@ -24,7 +24,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
         if not cls.__test__:
             raise unittest.SkipTest("Skipping")
 
-    def get_augumenter(self) -> dict:
+    def get_augumenters(self) -> dict:
         raise unittest.SkipTest("Skipping")
 
     def _check_aug_signals(self, raw_signals: RawSignals, aug_signals: RawSignals):
@@ -54,7 +54,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
         signal_creator = RawSignalsCreatorSines(samples_number=1000)
         raw_signals: RawSignals = signal_creator.get_set()
 
-        for aug_name, aug in self.get_augumenter().items():
+        for aug_name, aug in self.get_augumenters().items():
             with self.subTest(aug_name=aug_name):
                 obj = aug.fit(raw_signals)
                 self.assertIsNotNone(obj, "fit should return something")
@@ -67,7 +67,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
         signal_creator = RawSignalsCreatorZeros(samples_number=1000)
         raw_signals: RawSignals = signal_creator.get_set()
 
-        for aug_name, aug in self.get_augumenter().items():
+        for aug_name, aug in self.get_augumenters().items():
             with self.subTest(aug_name=aug_name):
                 obj = aug.fit(raw_signals)
                 self.assertIsNotNone(obj, "fit should return something")
@@ -80,7 +80,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
         signal_creator = RawSignalsCreatorSines()
         raw_signals = signal_creator.get_set()
 
-        for aug_name, aug in self.get_augumenter().items():
+        for aug_name, aug in self.get_augumenters().items():
             with self.subTest(aug_name=aug_name):
 
                 aug_signals = aug.fit_transform(raw_signals)
@@ -91,7 +91,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
         signal_creator = RawSignalsCreatorSines()
         raw_signals = signal_creator.get_set()
 
-        for aug_name, aug in self.get_augumenter().items():
+        for aug_name, aug in self.get_augumenters().items():
             with self.subTest(aug_name=aug_name):
 
                 with self.assertRaises(NotFittedError):
@@ -101,7 +101,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
         signal_creator = RawSignalsCreatorSines()
         raw_signals = signal_creator.get_set()
 
-        for aug_name, aug in self.get_augumenter().items():
+        for aug_name, aug in self.get_augumenters().items():
             with self.subTest(aug_name=aug_name):
                 with self.assertRaises(NotFittedError):
                     aug.sample(raw_signals)
@@ -111,7 +111,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
         raw_signals = signal_creator.get_set()
         n_raw_signals = len(raw_signals)
 
-        for aug_name, aug in self.get_augumenter().items():
+        for aug_name, aug in self.get_augumenters().items():
             with self.subTest(aug_name=aug_name):
                 aug.fit(raw_signals)
 
@@ -130,7 +130,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
     def test_dtype(self):
         dtypes = [np.float32, np.float64, np.single, np.double]
         for dtype in dtypes:
-            for aug_name, aug in self.get_augumenter().items():
+            for aug_name, aug in self.get_augumenters().items():
                 with self.subTest(dtype=dtype, aug_name=aug_name):
                     signal_creator = RawSignalsCreatorSines(dtype=dtype)
                     raw_signals = signal_creator.get_set()
@@ -148,7 +148,7 @@ class RawSignalsAugumenterTest(unittest.TestCase):
     def test_sample_dtype(self):
         dtypes = [np.float32, np.float64, np.single, np.double]
         for dtype in dtypes:
-            for aug_name, aug in self.get_augumenter().items():
+            for aug_name, aug in self.get_augumenters().items():
                 with self.subTest(dtype=dtype, aug_name= aug_name):
                     signal_creator = RawSignalsCreatorSines(dtype=dtype)
                     raw_signals = signal_creator.get_set()

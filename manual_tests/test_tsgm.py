@@ -46,7 +46,7 @@ cgan.compile(
 
 # 6. Training
 print("Starting training...")
-cgan.fit(X_scaled, y, epochs=20, batch_size=32)
+cgan.fit(X_scaled, y, epochs=20, batch_size=32) #Interface is Trainer from Keras?
 
 # 7. Targeted Generation
 # Generate 5 samples specifically for Class 2

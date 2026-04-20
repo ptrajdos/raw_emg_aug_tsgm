@@ -163,3 +163,4 @@ cython_debug/
 *.tar.xz
 #Macos
 .DS_Store
+prof/*
