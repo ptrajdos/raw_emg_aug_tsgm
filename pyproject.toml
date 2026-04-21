@@ -46,10 +46,12 @@ dev = [
 current_tf = [
     'tensorflow', 
     'tensorflow-probability',
+    'tf_keras',
 ]
 old_tf = [
     'tensorflow<2.16',
     'tensorflow-probability',
+    'tf_keras',
 
 ]
 old_tf_cuda = [
@@ -60,6 +62,7 @@ old_tf_cuda = [
 current_tf_cuda = [
     'tensorflow-probability',
     'tensorflow[and-cuda]',
+    'tf_keras',
 ]
 torch_current = [
     'torch',

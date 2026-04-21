@@ -1,6 +1,6 @@
 from raw_emg_aug_tsgm.data_augmentation.model_factories.cgan_factory import CGANFactory
 from tests.data_augmentation.model_factories.model_factory_test import ModelFactoryTest
-
+from tsgm.models.architectures import cGAN_LSTMConv3Architecture, cGAN_LSTMnArchitecture, tcGAN_Conv4Architecture
 
 class CGANFactoryTest(ModelFactoryTest):
 
@@ -9,6 +9,9 @@ class CGANFactoryTest(ModelFactoryTest):
     def get_factories(self) -> dict:
         return {
             "Base": CGANFactory(),
+            "LSTM-CONV": CGANFactory(architecture_cls=cGAN_LSTMConv3Architecture),
+            "LSTMn": CGANFactory(architecture_cls=cGAN_LSTMnArchitecture),
+            # "tcGAN": CGANFactory(architecture_cls=tcGAN_Conv4Architecture), #TODO incompatible
         }
     
     def _check_compiled(self, model):

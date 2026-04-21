@@ -5,6 +5,7 @@ import keras
 from dexterous_bioprosthesis_2021_raw_datasets.raw_signals_creators.raw_signals_creator_sines import (
     RawSignalsCreatorSines,
 )
+import numpy as np
 
 from raw_emg_aug_tsgm.raw_signals.tools import convert_to_tensor
 
@@ -44,11 +45,15 @@ class ModelFactoryTest(unittest.TestCase):
     def test_fitable(self):
     
         raw_data = self.gen_data()
+        x_types = [np.float32, np.float64]
+        y_types = [np.float32, np.int32] #By default accepts only numeric types
         for factory_name, factory in self.get_factories().items():
+            for xtype in x_types:
+                for ytype in y_types:
 
-            with self.subTest(factory_name=factory_name):
-                model = factory.get_compiled_model(raw_data)
-                np_data = convert_to_tensor(raw_data)
-                y = raw_data.get_labels().reshape(-1,1)
-                model.fit(np_data, y)
+                    with self.subTest(factory_name=factory_name, xtype=xtype, ytype=ytype):
+                        model = factory.get_compiled_model(raw_data)
+                        np_data = convert_to_tensor(raw_data).astype(xtype)
+                        y = raw_data.get_labels().reshape(-1,1).astype(ytype)
+                        model.fit(np_data, y)
 

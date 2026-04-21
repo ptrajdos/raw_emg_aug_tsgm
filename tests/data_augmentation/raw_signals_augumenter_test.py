@@ -145,6 +145,29 @@ class RawSignalsAugumenterTest(unittest.TestCase):
                             f"Wrong dtype of the signal. Expected {dtype}, got {sig.to_numpy().dtype}   ",
                         )
 
+    def test_ydtype(self):
+        dtypes = [np.int64, np.int32, np.float32, np.str_]
+        classes = np.asanyarray([1,2,3])
+        for dtype in dtypes:
+            for aug_name, aug in self.get_augumenters().items():
+                with self.subTest(dtype=dtype, aug_name=aug_name):
+                    signal_creator = RawSignalsCreatorSines(class_indices=classes.astype(dtype))
+                    raw_signals = signal_creator.get_set()
+
+                    aug_signals:RawSignals = aug.fit_transform(raw_signals)
+                    labels = aug_signals.get_labels()
+                    self.assertIsNotNone(labels, "Labels are none!")
+                    self.assertIsInstance(labels, np.ndarray, "Wrong labels array type")
+                    self.assertTrue(np.can_cast(labels.dtype, dtype), "Cannot cast")
+
+                    if dtype != np.str_:
+                        self.assertTrue(
+                            labels.dtype == dtype,
+                            f"Wrong exact type. Got {labels.dtype} expect: {dtype} ",
+                        )
+
+
+
     def test_sample_dtype(self):
         dtypes = [np.float32, np.float64, np.single, np.double]
         for dtype in dtypes:
