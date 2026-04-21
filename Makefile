@@ -95,3 +95,9 @@ lint: pypackages ${STATICDIR}
 	${ACTIVATE}; ${PYLINT} -j 0 ${SRCDIR} --output-format=json > ${LINTFILE} || true
 
 static_check: flake8 mypy lint
+
+verify_installation: pypackages
+	echo "Package versions"
+	${ACTIVATE}; ${PYTHON} -c "import tensorflow as tf; import keras ; print(tf.__version__); print(keras.__version__)"
+	echo "GPUs"
+	${ACTIVATE}; ${PYTHON} -c "import tensorflow as tf; print(tf.config.list_physical_devices('GPU'))"
