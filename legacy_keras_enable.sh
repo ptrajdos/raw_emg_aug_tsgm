@@ -1,0 +1,1 @@
+export TF_USE_LEGACY_KERAS=True
