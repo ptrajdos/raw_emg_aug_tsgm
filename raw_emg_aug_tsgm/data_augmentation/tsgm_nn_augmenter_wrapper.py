@@ -17,7 +17,6 @@ from sklearn.exceptions import NotFittedError
 from raw_emg_aug_tsgm.data_augmentation.model_factories.model_factory import (
     ModelFactory,
 )
-from raw_emg_aug_tsgm.raw_signals.tools import convert_to_tensor
 
 from tsgm.utils.data_processing import TSFeatureWiseScaler, TSGlobalScaler
 
@@ -78,7 +77,7 @@ class TSGMANNAugmenterWrapper(SamplerMixin, RawSignalsAugumenter):
         fit_args = deepcopy(kwargs)
         fit_args.update(self._get_effective_fit_options())
 
-        X = convert_to_tensor(raw_signals).astype(np.float32)
+        X = raw_signals.to_numpy().astype(np.float32)
         self._set_effective_normalizer()
         X = self._normalize_input(X)
 

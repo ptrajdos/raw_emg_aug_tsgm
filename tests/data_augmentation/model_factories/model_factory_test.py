@@ -7,7 +7,6 @@ from dexterous_bioprosthesis_2021_raw_datasets.raw_signals_creators.raw_signals_
 )
 import numpy as np
 
-from raw_emg_aug_tsgm.raw_signals.tools import convert_to_tensor
 
 
 class ModelFactoryTest(unittest.TestCase):
@@ -53,7 +52,7 @@ class ModelFactoryTest(unittest.TestCase):
 
                     with self.subTest(factory_name=factory_name, xtype=xtype, ytype=ytype):
                         model = factory.get_compiled_model(raw_data)
-                        np_data = convert_to_tensor(raw_data).astype(xtype)
+                        np_data = raw_data.to_numpy().astype(xtype)
                         y = raw_data.get_labels().reshape(-1,1).astype(ytype)
                         model.fit(np_data, y)
 
