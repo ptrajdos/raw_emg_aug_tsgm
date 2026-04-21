@@ -64,6 +64,12 @@ current_tf_cuda = [
     'tensorflow[and-cuda]',
     'tf_keras',
 ]
+current_tf_macos = [
+    'tensorflow-probability<0.25.0',
+    'tensorflow',
+    'tensorflow-metal',
+    'tf_keras',
+]
 torch_current = [
     'torch',
     'torchvision',

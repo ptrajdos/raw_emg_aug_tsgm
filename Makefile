@@ -7,6 +7,7 @@ COVDIR=${ROOTDIR}/htmlcov_p
 COVERAGERC=${ROOTDIR}/.coveragerc
 INSTALL_LOG_FILE=${ROOTDIR}/install.log
 VENV_SUBDIR=${ROOTDIR}/venv
+CONDA_SUBDIR=${ROOTDIR}/cvenv
 COVERAGERC=${ROOTDIR}/.coveragerc
 DOCS_DIR=${ROOTDIR}/docs
 TOXDIR=${ROOTDIR}/.tox
@@ -27,8 +28,11 @@ PYTEST=pytest
 PYLINT= pylint
 FLAKE8= flake8
 MYPY= mypy
+CONDA=conda
+CONDA_EXISTS := $(shell command -v conda 2> /dev/null)
 # --system-site-packages for using system installed packages ex. from FreeBSD. 
 VENV_OPTIONS=
+VENV_TYPE ?= venv
 
 LOGDIR=${ROOTDIR}/testlogs
 LOGFILE=${LOGDIR}/`date +'%y-%m-%d_%H-%M-%S'`.log
@@ -36,15 +40,19 @@ LOGFILE=${LOGDIR}/`date +'%y-%m-%d_%H-%M-%S'`.log
 TOX_CORES=auto
 BACKEND=current_tf
 
+ifeq ($(VENV_TYPE), conda)
+	ACTIVATE:= ${CONDA} activate ${CONDA_SUBDIR}
+else
 ifeq ($(OS),Windows_NT)
 	ACTIVATE:=. ${VENV_SUBDIR}/Scripts/activate
 else
 	ACTIVATE:=. ${VENV_SUBDIR}/bin/activate
 endif
+endif
 
 .PHONY: all clean test docs
 
-clean: clean_pypackages clean_venv clean_tox
+clean: clean_pypackages clean_venv clean_tox clean_cvenv
 	@echo "Cleaning up build artifacts, virtual environments, and test logs..."
 
 clean_pypackages:
@@ -53,14 +61,22 @@ clean_pypackages:
 clean_venv:
 	rm -rf ${VENV_SUBDIR}
 
+clean_cvenv:
+	rm -rf ${CONDA_SUBDIR}
+
 clean_tox:
 	rm -rf ${TOXDIR}
 venv:
 	${SYSPYTHON} -m venv --upgrade-deps ${VENV_OPTIONS} ${VENV_SUBDIR}
 	${ACTIVATE}; ${PYTHON} -m ${PIP} install wheel setuptools pypackages
+
+cvenv:
+	@command -v conda >/dev/null 2>&1 || { echo "No conda → skip"; exit 0; }
+	@echo "Creating conda env"
+	${CONDA} create --prefix ${CONDA_SUBDIR}
 	
 
-pypackages: venv
+pypackages: venv cvenv
 	${ACTIVATE}; ${PYTHON} -m ${PIP} install -e ${ROOTDIR}[dev,${BACKEND}] --prefer-binary --log ${INSTALL_LOG_FILE}
 	touch $@
 
