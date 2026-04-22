@@ -20,11 +20,12 @@ from tsgm.models.architectures import (
 from tensorflow.keras import mixed_precision
 import tensorflow as tf
 from matplotlib.backends.backend_pdf import PdfPages
+
 # tf.keras.backend.set_floatx('float16')
 
 # mixed_precision.set_global_policy('mixed_float16')
 
-N, R, C = 500, 50, 1
+N, R, C = 1500, 250, 12
 
 set_creat = RawSignalsCreatorSines(
     set_size=N, column_number=C, samples_number=R, dtype=np.float16
@@ -32,7 +33,7 @@ set_creat = RawSignalsCreatorSines(
 raw_data: RawSignals = set_creat.get_set()
 rep_file_path = "vis.md"
 
-with PdfPages('cgan1_vis.pdf') as pdf, open(rep_file_path, "w") as rep_file:
+with PdfPages("cgan1_vis.pdf") as pdf, open(rep_file_path, "w") as rep_file:
     rd = raw_data[0].to_numpy()
     plt.plot(rd)
     plt.title("Original signal")
@@ -46,11 +47,15 @@ with PdfPages('cgan1_vis.pdf') as pdf, open(rep_file_path, "w") as rep_file:
     }
 
     gen = TSGMANNAugmenterWrapper(
-        model_factory=CGANFactory(model_compile_options=opts, architecture_cls=cGAN_LSTMnArchitecture),
+        model_factory=CGANFactory(
+            model_compile_options=opts,
+            architecture_cls=cGAN_LSTMnArchitecture,
+            architecture_options={"n_blocks": 2},
+        ),
         normalize_channels=True,
         forced_keras_dtype=np.float16,
     )
-    gen.fit(raw_data, epochs=10, batch_size=32)
+    gen.fit(raw_data, epochs=30, batch_size=32)
 
     generted = gen.transform(raw_data)
 
@@ -60,11 +65,7 @@ with PdfPages('cgan1_vis.pdf') as pdf, open(rep_file_path, "w") as rep_file:
     mmd_value = mmd_metric(raw_data.to_numpy(), generted.to_numpy())
     rep_file.write(f"MMD between original and generated data: {mmd_value}\n")
 
-
-
     plt.plot(r)
     plt.title("Generated signal")
     pdf.savefig()
     plt.close()
-    
-
