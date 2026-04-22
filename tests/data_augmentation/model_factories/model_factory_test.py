@@ -54,5 +54,6 @@ class ModelFactoryTest(unittest.TestCase):
                         model = factory.get_compiled_model(raw_data)
                         np_data = raw_data.to_numpy().astype(xtype)
                         y = raw_data.get_labels().reshape(-1,1).astype(ytype)
+                        y = keras.utils.to_categorical(y,3)
                         model.fit(np_data, y)
 

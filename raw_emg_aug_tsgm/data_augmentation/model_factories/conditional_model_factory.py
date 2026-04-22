@@ -2,6 +2,7 @@ from typing import Optional
 import abc
 
 import keras
+import numpy as np
 from tsgm.models.architectures.zoo import Architecture
 from raw_emg_aug_tsgm.data_augmentation.model_factories.model_factory import (
     ModelFactory,
@@ -26,8 +27,6 @@ class ConditionalModelFactory(ModelFactory):
         self.model_compile_options = model_compile_options
         self.latent_dim = latent_dim
 
-    def get_output_dim(self) -> int:
-        return 1
 
     def get_latent_dim(self) -> int:
         return self.latent_dim
@@ -38,7 +37,8 @@ class ConditionalModelFactory(ModelFactory):
         """
         seq_len, feat_dim = raw_signals[0].to_numpy().shape
         latent_dim = self.get_latent_dim()
-        output_dim = self.get_output_dim()
+        u_labels = np.unique( raw_signals.get_labels())
+        output_dim = len(u_labels)
 
         di = {
             "seq_len": seq_len,

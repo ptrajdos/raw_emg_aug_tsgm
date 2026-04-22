@@ -1,6 +1,7 @@
 from copy import deepcopy
 from typing import Optional
 
+import keras
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 from dexterous_bioprosthesis_2021_raw_datasets.data_augumentation.raw_signals_augumenter import (
@@ -30,6 +31,7 @@ class TSGMANNAugmenterWrapper(SamplerMixin, RawSignalsAugumenter):
         random_state=10,
         normalize: bool = True,
         normalize_channels: bool = False,
+        forced_keras_dtype = np.float32,
     ) -> None:
         RawSignalsAugumenter.__init__(self)
         SamplerMixin.__init__(self)
@@ -39,6 +41,7 @@ class TSGMANNAugmenterWrapper(SamplerMixin, RawSignalsAugumenter):
         self.random_state = random_state
         self.normalize = normalize
         self.normalize_channels = normalize_channels
+        self.forced_keras_dtype = forced_keras_dtype
 
     def _get_effective_fit_options(self):
         return {} if self.fit_options is None else self.fit_options
@@ -77,19 +80,20 @@ class TSGMANNAugmenterWrapper(SamplerMixin, RawSignalsAugumenter):
         fit_args = deepcopy(kwargs)
         fit_args.update(self._get_effective_fit_options())
 
-        X = raw_signals.to_numpy().astype(np.float32)
+        X = raw_signals.to_numpy().astype(self.forced_keras_dtype)
         self._set_effective_normalizer()
         X = self._normalize_input(X)
 
         y = raw_signals.get_labels()
         self.label_encoder_ = LabelEncoder()
         enc_y = self.label_encoder_.fit_transform(y)
-        y = np.asanyarray(enc_y).reshape(-1, 1)
+        y = np.asanyarray(enc_y)
+        y_keras_enc = keras.utils.to_categorical(y)
 
         self.classes_, counts = np.unique(y, return_counts=True)
         self.probs_ = counts / np.sum(counts)
 
-        self._model.fit(X, y, **fit_args)
+        self._model.fit(X, y_keras_enc, **fit_args)
 
         return self
 
@@ -110,9 +114,10 @@ class TSGMANNAugmenterWrapper(SamplerMixin, RawSignalsAugumenter):
         labels_to_gen = self._random_state.choice(
             self.classes_, size=n_gen_sigs, p=self.probs_
         )
+        labels_to_gen_keras_enc = keras.utils.to_categorical(labels_to_gen, len(self.classes_))
         decoded_labels = self.label_encoder_.inverse_transform(labels_to_gen)
-        # TODO need retransformation!
-        tensor = self._model.generate(labels_to_gen.reshape(-1, 1))
+    
+        tensor = self._model.generate(labels_to_gen_keras_enc)
         tensor_denorm = self._denormalize_output(tensor).numpy().astype(rs_dtype)
 
         for np_sig, label in zip(tensor_denorm, decoded_labels):

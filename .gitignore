@@ -164,3 +164,4 @@ cython_debug/
 #Macos
 .DS_Store
 prof/*
+cvenv/*

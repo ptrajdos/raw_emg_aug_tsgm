@@ -17,7 +17,7 @@ class CGANFactory(ConditionalModelFactory):
         return {
             "d_optimizer": keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
             "g_optimizer": keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
-            "loss_fn": keras.losses.BinaryCrossentropy(from_logits=True),
+            "loss_fn": keras.losses.BinaryCrossentropy(),
         }
     def _get_default_model_construction_options(self) -> dict:
         return dict()

@@ -20,7 +20,7 @@ class CGANFactoryTest(ModelFactoryTest):
             #     architecture_cls=tcGAN_Conv4Architecture,                
             #     model_construction_options={"temporal": True},
             #     latent_dim=1
-            # ),  # TODO incompatible 
+            # ),  # TODO incompatible. Even in-library MWE does not work. 
         }
 
     def _check_compiled(self, model):
