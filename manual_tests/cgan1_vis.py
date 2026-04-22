@@ -46,7 +46,7 @@ with PdfPages('cgan1_vis.pdf') as pdf, open(rep_file_path, "w") as rep_file:
     }
 
     gen = TSGMANNAugmenterWrapper(
-        model_factory=CGANFactory(model_compile_options=opts),
+        model_factory=CGANFactory(model_compile_options=opts, architecture_cls=cGAN_LSTMnArchitecture),
         normalize_channels=True,
         forced_keras_dtype=np.float16,
     )
