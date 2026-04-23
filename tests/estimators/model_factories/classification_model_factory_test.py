@@ -56,4 +56,6 @@ class ClassificationModelFactoryTest(unittest.TestCase):
                         y = raw_data.get_labels().reshape(-1,1).astype(ytype)
                         y = keras.utils.to_categorical(y,3)
                         model.fit(np_data, y)
+                        predictions = model.predict(np_data)
+                        self.assertIsNotNone(predictions, "Predictions are None")
 
