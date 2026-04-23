@@ -7,11 +7,13 @@ from dexterous_bioprosthesis_2021_raw_datasets.raw_signals_creators.raw_signals_
 )
 import numpy as np
 
+from raw_emg_aug_tsgm.estimators.model_factories.classification_model_factory import ClassificationModelFactory
 
 
-class ModelFactoryTest(unittest.TestCase):
 
-    __test__ = False
+class ClassificationModelFactoryTest(unittest.TestCase):
+
+    __test__ = True
 
     @classmethod
     def setUpClass(cls):
@@ -19,15 +21,14 @@ class ModelFactoryTest(unittest.TestCase):
             raise unittest.SkipTest("Skipping")
 
     def get_factories(self) -> dict:
-        raise unittest.SkipTest("Skipping")
+        return {
+            "ClassificationModelFactory": ClassificationModelFactory(),
+        }
     
     def gen_data(self, N=10, T=50, C=2):
         generator = RawSignalsCreatorSines(set_size=N, samples_number=T, column_number=C)
         return generator.get_set()
 
-
-    def _check_compiled(self, model):
-        pass
 
     def test_types(self):
     
@@ -39,7 +40,6 @@ class ModelFactoryTest(unittest.TestCase):
 
                 self.assertIsNotNone(model, "Model is None")
                 self.assertIsInstance(model, keras.Model, "Wrong model type")
-                self._check_compiled(model)
 
     def test_fitable(self):
     

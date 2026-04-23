@@ -25,7 +25,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 # mixed_precision.set_global_policy('mixed_float16')
 
-N, R, C = 1500, 250, 12
+N, R, C = 1500, 250, 2
 
 set_creat = RawSignalsCreatorSines(
     set_size=N, column_number=C, samples_number=R, dtype=np.float16
