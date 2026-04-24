@@ -41,8 +41,8 @@ with PdfPages("cgan1_vis.pdf") as pdf, open(rep_file_path, "w") as rep_file:
     plt.close()
 
     opts = {
-        "d_optimizer": keras.optimizers.legacy.Adam(learning_rate=0.0002, beta_1=0.5),
-        "g_optimizer": keras.optimizers.legacy.Adam(learning_rate=0.0002, beta_1=0.5),
+        "d_optimizer": keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
+        "g_optimizer": keras.optimizers.Adam(learning_rate=0.0002, beta_1=0.5),
         "loss_fn": keras.losses.BinaryCrossentropy(),
     }
 

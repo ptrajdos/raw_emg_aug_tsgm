@@ -56,7 +56,7 @@ class ClassificationModelFactory(ModelFactory):
     def _get_default_model_compile_options(self) -> dict:
         return {
             "loss": keras.losses.CategoricalCrossentropy(),
-            "optimizer": keras.optimizers.legacy.Adam(),
+            "optimizer": keras.optimizers.Adam(),
             "metrics": ["accuracy"],
         }
 
