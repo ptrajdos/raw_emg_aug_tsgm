@@ -15,6 +15,12 @@ class NNModelEstimatorTest(unittest.TestCase):
     def get_models(self) -> dict:
         return {
             "Default": NNModelEstimator(),
+            "Custom fit options": NNModelEstimator(
+                fit_options={"epochs": 5, "batch_size": 16}
+            ),
+            "Custom predict options": NNModelEstimator(
+                predict_options={"batch_size": 16}
+            ),
         }
 
     def gen_data(self, N=10, T=50, C=2, dtype=np.float32, classes=[1, 2, 3]):
