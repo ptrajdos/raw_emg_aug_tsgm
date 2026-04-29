@@ -7,7 +7,6 @@ COVDIR=${ROOTDIR}/htmlcov_p
 COVERAGERC=${ROOTDIR}/.coveragerc
 INSTALL_LOG_FILE=${ROOTDIR}/install.log
 VENV_SUBDIR=${ROOTDIR}/venv
-COVERAGERC=${ROOTDIR}/.coveragerc
 DOCS_DIR=${ROOTDIR}/docs
 TOXDIR=${ROOTDIR}/.tox
 TOXJSON=${ROOTDIR}/tox.json
