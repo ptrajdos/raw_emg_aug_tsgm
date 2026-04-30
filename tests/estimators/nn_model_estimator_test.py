@@ -102,5 +102,25 @@ class NNModelEstimatorTest(unittest.TestCase):
             with self.subTest(model_name=model_name):
                 with self.assertRaises(NotFittedError, msg="Predicting before fitting should raise an exception"):
                     model.predict(raw_data)
+
+    def test_deepcopy(self):
+        import copy
+
+        raw_data = self.gen_data()
+        for model_name, model in self.get_models().items():
+
+            with self.subTest(model_name=model_name):
+                model_copy = copy.deepcopy(model)
+                self.assertIsNot(model, model_copy, "Deep copy should create a new instance")
+                self.assertEqual(
+                    model.fit_options,
+                    model_copy.fit_options,
+                    "Fit options should be the same in the copy",
+                )
+                self.assertEqual(
+                    model.predict_options,
+                    model_copy.predict_options,
+                    "Predict options should be the same in the copy",
+                )
                         
 
